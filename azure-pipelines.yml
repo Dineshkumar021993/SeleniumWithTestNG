@@ -1,14 +1,15 @@
 trigger:
   branches:
     include:
-      - main  # Replace "main" with the branch you want to trigger the pipeline
+      - main
 
 pool:
   vmImage: 'ubuntu-latest'
 
+steps:
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'  # Replace with the correct path to your pom.xml file
+    mavenPomFile: 'pom.xml'
     goals: 'clean test'
   displayName: 'Build and Package Maven Project'
 
@@ -28,5 +29,6 @@ pool:
     publishLocation: 'Container'
 
 variables:
-  imageName: 'dineshkumar021993/gatlingnew'
+  imageName: 'dineshkumar021993/SeleniumTestswithTestNG'
+
 
