@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+      - main  # Replace "main" with the branch you want to trigger the pipeline
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'  # Replace with the correct path to your pom.xml file
+    goals: 'clean test'
+  displayName: 'Build and Package Maven Project'
+
+- script: docker build -t $(imageName):$(Build.BuildId) .
+  displayName: 'Docker Build'
+
+- script: docker login -u dineshkumar021993 -p dinesh@#4 
+  displayName: 'Docker Login'
+
+- script: docker push $(imageName):$(Build.BuildId)
+  displayName: 'Docker Push'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '.'
+    ArtifactName: 'dockerImage'
+    publishLocation: 'Container'
+
+variables:
+  imageName: 'dineshkumar021993/gatlingnew'
+
